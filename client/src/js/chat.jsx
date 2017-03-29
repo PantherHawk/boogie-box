@@ -127,7 +127,8 @@ class Chat extends React.Component {
   render() {
     var chats = [];
     _.each(this.state.messages, function(message) {
-      chats.push(<ChatMessage message={message} key={message.id}/>);
+      console.log(message.id)
+      chats.unshift(<ChatMessage message={message} key={message.id}/>);
     })
 
 
