@@ -106,6 +106,9 @@ class Chat extends React.Component {
       messages: [],
       anonName: this.genAnonName()
     }
+
+
+
   }
 
   // This just generates a random name of the form
@@ -118,17 +121,34 @@ class Chat extends React.Component {
     return name;
   }
 
+
   // Just for utility in updating the chat correctly
   // with the most up to date information
   updateChat() {
     this.forceUpdate();
   }
 
+//   componentWillUpdate() {
+//     console.log('in componentWillUpdate')
+//   var node = this.refs.scrollbar;
+//   console.log(this.refs)
+//   let hScrollBarHeight = (node.scrollWidth !== node.clientWidth) ? 20 : 0;
+//   this.shouldScrollBottom = ((node.scrollTop + node.clientHeight + hScrollBarHeight) >= node.scrollHeight)
+//   }
+
+//   componentDidUpdate() {
+//   console.log('in componentDidUpdate')
+//   if (this.shouldScrollBottom) {
+//     var node = this.refs.scrollbar;
+//     node.scrollTop = node.scrollHeight;
+//   }
+// }
+
+
   render() {
     var chats = [];
     _.each(this.state.messages, function(message) {
-      console.log(message.id)
-      chats.unshift(<ChatMessage message={message} key={message.id}/>);
+      chats.push(<ChatMessage message={message} key={message.id}/>);
     })
 
 
@@ -147,5 +167,7 @@ class Chat extends React.Component {
     )
   }
 };
+
+
 
 window.Chat = Chat;
