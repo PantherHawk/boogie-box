@@ -9,6 +9,8 @@ class ChatInput extends React.Component {
       messages: this.props.messages
     }
 
+    // Messages will render on load
+    this.props.updateChat();
 
     // Handles receiving new messages from the socket
     // Note: Only users who didn't send the message will
@@ -21,8 +23,15 @@ class ChatInput extends React.Component {
         text: data.text,
         id: this.state.messages.length
       };
+      apiHelper.postChat(newMessage, function() {
+        this.props.updateChat();
+      }.bind(this));
+
+      // This is a temporary message to show the user
+      // that their message was posted. When they receive
+      //  a new message, the view will rerender and this
+      // will be overwritten with the actual message
       this.state.messages.push(newMessage);
-      this.props.updateChat();
     }.bind(this));
 
   }
@@ -128,23 +137,21 @@ class Chat extends React.Component {
     this.forceUpdate();
     // componentDidUpdate() {
     // this.scrollElement();
+
   }
 
-//   componentWillUpdate() {
-//     console.log('in componentWillUpdate')
-//   var node = this.refs.scrollbar;
-//   console.log(this.refs)
-//   let hScrollBarHeight = (node.scrollWidth !== node.clientWidth) ? 20 : 0;
-//   this.shouldScrollBottom = ((node.scrollTop + node.clientHeight + hScrollBarHeight) >= node.scrollHeight)
-//   }
+  scrollToBottom() {
+    var node = ReactDOM.findDOMNode(this.messagesEnd);
+    node.scrollIntoView({block: "end", behavior: "smooth"});
+  }
 
-//   componentDidUpdate() {
-//   console.log('in componentDidUpdate')
-//   if (this.shouldScrollBottom) {
-//     var node = this.refs.scrollbar;
-//     node.scrollTop = node.scrollHeight;
-//   }
-// }
+  componentDidMount() {
+    this.scrollToBottom();
+  }
+
+  componentDidUpdate() {
+    this.scrollToBottom();
+  }
 
 
   render() {
@@ -153,15 +160,19 @@ class Chat extends React.Component {
       chats.push(<ChatMessage message={message} key={message.id}/>);
 
     })
-    var e = chats[chats.length - 1]
-    e.scrollElement();
+    // var e = chats[chats.length - 1]
+    // e.scrollElement();
 
     return (
       <div className="chatBox">
         <div id='chatPanel' className='panel panel-info'>
           <div id='chatTitle' className='panel-heading'>Boogie-Chat</div>
           <div id='chatPanBody' className='panel-body'>
-            <div id='textBody'>{chats}</div>
+            <div id='textBody'>{chats}
+              <div style = {{float: "left", clear: "both"}} ref={(el) => {console.log('el', el); this.messagesEnd = el; }}>
+              </div>
+            </div>
+
           </div>
           <div id='chatPanFtr' className='panel-footer'>
             <ChatInput messages={this.state.messages} name={this.state.anonName} updateChat={this.updateChat.bind(this)} socket={this.props.socket}/>
