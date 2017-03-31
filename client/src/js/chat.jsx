@@ -126,6 +126,8 @@ class Chat extends React.Component {
   // with the most up to date information
   updateChat() {
     this.forceUpdate();
+    // componentDidUpdate() {
+    // this.scrollElement();
   }
 
 //   componentWillUpdate() {
@@ -149,8 +151,10 @@ class Chat extends React.Component {
     var chats = [];
     _.each(this.state.messages, function(message) {
       chats.push(<ChatMessage message={message} key={message.id}/>);
-    })
 
+    })
+    var e = chats[chats.length - 1]
+    e.scrollElement();
 
     return (
       <div className="chatBox">

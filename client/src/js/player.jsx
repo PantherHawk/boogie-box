@@ -14,7 +14,7 @@ class Video extends React.Component {
     //default audio states
       video: this.props.video, //reference state that allows us to access the video URL as well as its title
       url: url, //the url that the react player component uses for current video
-      hideVid: false, //whether or not the videos are hidden on the page. Audio will play regardless
+      hideVid: true, //whether or not the videos are hidden on the page. Audio will play regardless
       playing: true, //If false, playback is paused. Also controls automatic playback upon load
       muted: false,
       volume: 1, //volume is measure as a decimal number between 0 and 1
@@ -167,17 +167,21 @@ class Video extends React.Component {
         this.setState({
           video: newVid, //set the new video's data
           url: newVid.videourl, //set the new video's URL
-          progress: 0 //set its playback time to the start (zero)
+          progress: 0, //set its playback time to the start (zero)
+          hideVid: false
         });
       } else { //ortherwise use empty data, as no video exists to be played
         this.setState({
           video: null,
           url: null,
-          progress: 0
+          progress: 0,
+          hideVid: true
         });
       }
     }
   }
+
+
 
   render() { //render the video panel using bootstrap
     return (
